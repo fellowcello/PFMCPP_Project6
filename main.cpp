@@ -1,20 +1,15 @@
 /*
  Project 6: Part 1 / 2
  Video: Chapter 3 Part 2
-
 Create a branch named Part1
-
 Purpose:  This project will show you the difference between member functions and static class functions, as well as the difference between pointers and references and the code semantics that accompany pointers and references.
-
  Pointers
-
  Please look at the screenshot in the files to see what happens if you paste this assignment into an existing cpp file in an xcode project
  
  Task: replace all of the <#place holder#> placeholders with proper names and types that will make this program compile and run.
  
  press the Compile, link and run... button and work your way through all of the error messages.
  
-
  steps:
  
  1) finish implementing the constructor for T. the constructor parameters need to initialize 2) and 3)
@@ -58,76 +53,114 @@ Purpose:  This project will show you the difference between member functions and
 #include <string>
 struct T
 {
-    T(<#type name#> v, const char* <#variable name#>)   //1
-    //2
-    //3
+    T(float v, const char* charName) : value(v), name(charName) { }   //1
+    float value = 0.0f; //2
+    std::string name = "init name"; //3
 };
 
-struct <#structName1#>                                //4
+struct MyStruct1                                //4
 {
-    <#type name#> compare(<#type name#> a, <#type name#> b) //5
+    T* compare(T* a, T* b) //5
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if(a != nullptr && b != nullptr)
+        {
+            if( a->value < b->value ) return a;
+            if( a->value > b->value ) return b;
+        }
+        
+        std::cout << "a and/or b wasn't properly initialized." << std::endl;
         return nullptr;
     }
 };
 
 struct U
 {
-    float <#name1#> { 0 }, <#name2#> { 0 };
-    <#returnType#> <#memberFunction#>(<#type name#>* <#updatedValue#>)      //12
+    float myFloat1 { 6.f }, myFloat2 { 3.f };
+    float myMemberFunction(float* myUpdatedValue)      //12
     {
+        std::cout << "U's myFloat1 value: " << myFloat1 << std::endl;
         
+        if(myUpdatedValue != nullptr)
+        {
+            myFloat1 = *myUpdatedValue;
+            std::cout << "U's myFloat1 updated value: " << myFloat1 << std::endl;
+
+            while( std::abs(myFloat2 - myFloat1) > 0.001f )
+            {
+                 /*
+                  write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
+                 */
+                 myFloat2 += .05f;
+            }
+            
+            std::cout << "U's myFloat2 updated value: " << myFloat2 << std::endl;
+            return myFloat2 * myFloat1;  
+        }
+
+        std::cout << "myUpdatedValue wasn't properly initialized." << std::endl;
+        return 0;
     }
 };
 
-struct <#structname2#>
+struct MyStruct2
 {
-    static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
+    static float myStaticFunctionA(U* that, float* myUpdatedValue )        //10
     {
-        std::cout << "U's <#name1#> value: " << that-><#name1#> << std::endl;
-        that-><#name1#> = <#updatedValue#>;
-        std::cout << "U's <#name1#> updated value: " << that-><#name1#> << std::endl;
-        while( std::abs(that-><#name2#> - that-><#name1#>) > 0.001f )
+        if(that != nullptr && myUpdatedValue != nullptr)
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
-            that-><#name2#> += ;
+            std::cout << "U's myFloat1 value: " << that->myFloat1 << std::endl;
+            that->myFloat1 = *myUpdatedValue;
+            std::cout << "U's myFloat1 updated value: " << that->myFloat1 << std::endl;
+            while( std::abs(that->myFloat2 - that->myFloat1) > 0.001f )
+            {
+                /*
+                 write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
+                 */
+                that->myFloat2 += .05f;
+            }
+            
+            std::cout << "U's myFloat2 updated value: " << that->myFloat2 << std::endl;
+            return that->myFloat2 * that->myFloat1;
         }
-        std::cout << "U's <#name2#> updated value: " << that-><#name2#> << std::endl;
-        return that-><#name2#> * that-><#name1#>;
+        
+        std::cout << "that and/or myUpdatedValue wasn't properly initialized." << std::endl;
+        return 0;
     }
 };
         
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
-
  Commit your changes by clicking on the Source Control panel on the left, entering a message, and click [Commit and push].
  
  If you didn't already: 
     Make a pull request after you make your first commit
     pin the pull request link and this repl.it link to our DM thread in a single message.
-
  send me a DM to review your pull request when the project is ready for review.
-
  Wait for my code review.
  */
 
 int main()
 {
-    T <#name1#>( , );                                             //6
-    T <#name2#>( , );                                             //6
+    T myT1( 5.0f, "a");                                             //6
+    T myT2( 2.0f, "b");                                             //6
     
-    <#structName1#> f;                                            //7
-    auto* smaller = f.compare( , );                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    MyStruct1 f;          //7
+
+
+    auto* smaller = f.compare(&myT1, &myT2);                              //8
+    if(smaller != nullptr)
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    }
+    else
+    {
+        std::cout << "smaller wasn't initialized properly" << std::endl;
+    }
     
-    U <#name3#>;
+    U myU1;
     float updatedValue = 5.f;
-    std::cout << "[static func] <#name3#>'s multiplied values: " << <#structname2#>::<#staticFunctionA#>( , ) << std::endl;                  //11
+    std::cout << "myStaticFunctionA myU1's multiplied values: " << MyStruct2::myStaticFunctionA( &myU1, &updatedValue) << std::endl;                  //11
     
-    U <#name4#>;
-    std::cout << "[member func] <#name4#>'s multiplied values: " << <#name4#>.<#memberFunction#>( &updatedValue ) << std::endl;
+    U myU2;
+    std::cout << "myMemberFunction myU2's multiplied values: " << myU2.myMemberFunction( &updatedValue ) << std::endl;
 }

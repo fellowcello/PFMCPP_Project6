@@ -67,7 +67,8 @@ struct MyStruct1                                //4
             if( a->value < b->value ) return a;
             if( a->value > b->value ) return b;
         }
-        std::cout << "a and/or b weren't properly initialized." << std::endl;
+        
+        std::cout << "a and/or b wasn't properly initialized." << std::endl;
         return nullptr;
     }
 };
@@ -77,19 +78,27 @@ struct U
     float myFloat1 { 6.f }, myFloat2 { 3.f };
     float myMemberFunction(float* myUpdatedValue)      //12
     {
-        
         std::cout << "U's myFloat1 value: " << myFloat1 << std::endl;
-        myFloat1 = *myUpdatedValue;
-        std::cout << "U's myFloat1 updated value: " << myFloat1 << std::endl;
-        while( std::abs(myFloat2 - myFloat1) > 0.001f )
+        
+        if(myUpdatedValue != nullptr)
         {
-            /*
-             write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
-             */
-            myFloat2 += .05f;
+            myFloat1 = *myUpdatedValue;
+            std::cout << "U's myFloat1 updated value: " << myFloat1 << std::endl;
+
+            while( std::abs(myFloat2 - myFloat1) > 0.001f )
+            {
+                 /*
+                  write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
+                 */
+                 myFloat2 += .05f;
+            }
+            
+            std::cout << "U's myFloat2 updated value: " << myFloat2 << std::endl;
+            return myFloat2 * myFloat1;  
         }
-        std::cout << "U's myFloat2 updated value: " << myFloat2 << std::endl;
-        return myFloat2 * myFloat1;
+
+        std::cout << "myUpdatedValue wasn't properly initialized." << std::endl;
+        return 0;
     }
 };
 
@@ -97,18 +106,25 @@ struct MyStruct2
 {
     static float myStaticFunctionA(U* that, float* myUpdatedValue )        //10
     {
-        std::cout << "U's myFloat1 value: " << that->myFloat1 << std::endl;
-        that->myFloat1 = *myUpdatedValue;
-        std::cout << "U's myFloat1 updated value: " << that->myFloat1 << std::endl;
-        while( std::abs(that->myFloat2 - that->myFloat1) > 0.001f )
+        if(that != nullptr && myUpdatedValue != nullptr)
         {
-            /*
-             write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
-             */
-            that->myFloat2 += .05f;
+            std::cout << "U's myFloat1 value: " << that->myFloat1 << std::endl;
+            that->myFloat1 = *myUpdatedValue;
+            std::cout << "U's myFloat1 updated value: " << that->myFloat1 << std::endl;
+            while( std::abs(that->myFloat2 - that->myFloat1) > 0.001f )
+            {
+                /*
+                 write something that makes the distance between that->myFloat2 and that->myFloat1 get smaller
+                 */
+                that->myFloat2 += .05f;
+            }
+            
+            std::cout << "U's myFloat2 updated value: " << that->myFloat2 << std::endl;
+            return that->myFloat2 * that->myFloat1;
         }
-        std::cout << "U's myFloat2 updated value: " << that->myFloat2 << std::endl;
-        return that->myFloat2 * that->myFloat1;
+        
+        std::cout << "that and/or myUpdatedValue wasn't properly initialized." << std::endl;
+        return 0;
     }
 };
         
@@ -128,9 +144,18 @@ int main()
     T myT1( 5.0f, "a");                                             //6
     T myT2( 2.0f, "b");                                             //6
     
-    MyStruct1 f;                                            //7
+    MyStruct1 f;          //7
+
+
     auto* smaller = f.compare(&myT1, &myT2);                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    if(smaller != nullptr)
+    {
+        std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    }
+    else
+    {
+        std::cout << "smaller wasn't initialized properly" << std::endl;
+    }
     
     U myU1;
     float updatedValue = 5.f;

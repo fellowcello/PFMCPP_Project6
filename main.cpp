@@ -44,7 +44,7 @@ struct MyStruct1                                //4
             if( a->value > b->value ) return b;
         }
         
-        std::cout << "a and/or b wasn't properly initialized." << std::endl;
+        std::cout << "a and/or b wasn't properly initialized or were equal" << std::endl;
         return nullptr;
     }
 };
@@ -106,10 +106,9 @@ struct MyStruct2
 int main()
 {
     T myT1( 5.0f, "a");                                             //6
-    T myT2( 2.0f, "b");                                             //6
+    T myT2( 5.0f, "b");                                             //6
     
-    MyStruct1 f;          //7
-
+    MyStruct1 f;                                                      //7
 
     auto* smaller = f.compare(&myT1, &myT2);                              //8
     if(smaller != nullptr)
@@ -118,7 +117,7 @@ int main()
     }
     else
     {
-        std::cout << "smaller wasn't initialized properly" << std::endl;
+        std::cout << "smaller compare values were equal" << std::endl;
     }
     
     U myU1;

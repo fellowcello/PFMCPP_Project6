@@ -36,15 +36,12 @@ struct T
 
 struct MyStruct1                                //4
 {
-    T* compare(T* a, T* b) //5
+    T* compare(T& a, T& b) //5
     {
-        if(a != nullptr && b != nullptr)
-        {
-            if( a->value < b->value ) return a;
-            if( a->value > b->value ) return b;
-        }
-        
-        std::cout << "a and/or b wasn't properly initialized or were equal" << std::endl;
+        if( a.value < b.value ) return &a;
+        if( a.value > b.value ) return &b;
+
+        std::cout << "a and b were equal" << std::endl;
         return nullptr;
     }
 };
@@ -105,12 +102,12 @@ struct MyStruct2
 
 int main()
 {
-    T myT1( 5.0f, "a");                                             //6
+    T myT1( 2.0f, "a");                                             //6
     T myT2( 5.0f, "b");                                             //6
     
     MyStruct1 f;                                                      //7
 
-    auto* smaller = f.compare(&myT1, &myT2);                              //8
+    auto* smaller = f.compare(myT1, myT2);                              //8
     if(smaller != nullptr)
     {
         std::cout << "the smaller one is << " << smaller->name << std::endl; //9
